@@ -162,8 +162,21 @@ button, input, textarea { font: inherit; color: inherit; }
   cursor: pointer;
 }
 .mic:disabled { opacity: .45; cursor: default; }
-.mic.on { background: var(--lamp); color: var(--lamp-ink); border-color: var(--lamp); animation: glow 1.6s ease-in-out infinite; }
-@keyframes glow { 50% { box-shadow: 0 0 0 7px color-mix(in oklab, var(--lamp) 22%, transparent); } }
+.mic-stop {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  height: 42px;
+  padding: 0 16px 0 14px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: var(--lamp-ink);
+  font: 600 14px/1 var(--f-ui);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.mic-stop .dot { width: 10px; height: 10px; border-radius: 2px; background: currentColor; animation: pulse 1.2s ease-in-out infinite; }
 
 .btn {
   appearance: none;

@@ -116,27 +116,32 @@ export function Dialog({
           <div className="composer-row">
             <small>
               {dictation.listening
-                ? "Ich höre zu …"
+                ? "Ich höre zu. Tippe auf „Fertig“ oder mach eine Pause."
                 : answers === rounds - 1
                   ? "Danach folgt die Einordnung"
                   : "\u00a0"}
             </small>
             <div className="composer-actions">
-              {dictation.supported && (
-                <button
-                  type="button"
-                  className={`mic${dictation.listening ? " on" : ""}`}
-                  onClick={dictation.toggle}
-                  disabled={pending}
-                  aria-pressed={dictation.listening}
-                  aria-label={dictation.listening ? "Spracheingabe beenden" : "Antwort einsprechen"}
-                >
-                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                    <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" />
-                    <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-                  </svg>
-                </button>
-              )}
+              {dictation.supported &&
+                (dictation.listening ? (
+                  <button type="button" className="mic-stop" onClick={dictation.stop}>
+                    <span className="dot" aria-hidden="true" />
+                    Fertig
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="mic"
+                    onClick={dictation.toggle}
+                    disabled={pending}
+                    aria-label="Antwort einsprechen"
+                  >
+                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                      <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" />
+                      <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                ))}
               <button className="btn" type="submit" disabled={pending || draft.trim().length === 0}>
                 Antworten
               </button>
