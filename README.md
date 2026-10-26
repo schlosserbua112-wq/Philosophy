@@ -25,12 +25,9 @@ Buchempfehlungen kommen nur aus dem Katalog in `supabase/seed.sql`. Claude wähl
 
 1. Neues Projekt auf [supabase.com](https://supabase.com) anlegen.
 2. Im SQL-Editor zuerst `supabase/migrations/20261026000000_init.sql`, dann `supabase/seed.sql` ausführen (oder `supabase db push` und `supabase db seed` mit der CLI).
-3. **Authentication → Email Templates**: In den Vorlagen **Magic Link** und **Confirm signup** den Code einfügen, z. B.:
-   ```html
-   <h2>Dein Code für Denkweise</h2>
-   <p style="font-size:28px;letter-spacing:6px"><b>{{ .Token }}</b></p>
-   ```
-   Hintergrund: Eine Web-App auf dem iPhone-Home-Bildschirm hat eigene Cookies. Ein Login-Link würde nur Safari anmelden, deshalb meldet man sich mit einem 6-stelligen Code an.
+3. **Authentication → URL Configuration**: Als Site URL die Vercel-Adresse eintragen (z. B. `https://denkweise-vale-efe3.vercel.app`), damit der Bestätigungslink nach der Registrierung zurück zur App führt.
+   Angemeldet wird mit E-Mail und Passwort direkt in der App. Ein Login-Link aus einer E-Mail würde auf dem iPhone nur Safari anmelden, nicht die App auf dem Home-Bildschirm, weil diese eigene Cookies hat.
+   Tipp: Wenn dein Konto angelegt ist, kannst du unter **Authentication → Sign In / Providers** „Allow new users to sign up“ ausschalten, damit niemand sonst die App (und deinen Claude-API-Schlüssel) nutzt.
 4. Unter **Project Settings → API** die Projekt-URL und den Publishable Key kopieren.
 
 ### 2. Claude API
