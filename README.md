@@ -1,6 +1,6 @@
 # Denkweise
 
-Jeden Tag eine philosophische Frage. Du antwortest, Sokrates hakt nach, und nach drei Antworten wird dein Gedankengang einer Denkschule zugeordnet, mit einem Sachbuch zum Verstehen und einem Roman, der dieses Denken als Geschichte erzählt.
+Jeden Tag eine philosophische Frage. Du antwortest, Sokrates hakt nach, und nach drei Antworten wird dein Gedankengang einer Denkschule zugeordnet, mit einem Sachbuch zum Verstehen und einem Roman, der dieses Denken als Geschichte erzählt. Dazu kommt eine Gegenperspektive: eine Denkschule, die deiner Position widerspricht, ebenfalls mit Sachbuch und Roman.
 
 Die App merkt sich deine Antworten und schreibt daraus ein philosophisches Profil fort: Überzeugungen, Spannungen und offene Fäden. Ab dem dritten Gespräch entstehen die Tagesfragen aus diesem Profil, und unter „Profil“ kannst du Sokrates bitten, deine stärkste Überzeugung anzugreifen.
 

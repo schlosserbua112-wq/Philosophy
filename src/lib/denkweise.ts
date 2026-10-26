@@ -260,6 +260,10 @@ async function classify(
       sachbuch_id: z.enum(sachbuecher as [string, ...string[]]),
       roman_id: z.enum(romane as [string, ...string[]]),
       closing: z.string(),
+      counter_school_slug: slugs,
+      counter_reason: z.string(),
+      counter_sachbuch_id: z.enum(sachbuecher as [string, ...string[]]),
+      counter_roman_id: z.enum(romane as [string, ...string[]]),
     }),
     "medium",
   );
@@ -273,6 +277,9 @@ async function classify(
     explanation: result.explanation,
     scores: result.scores.slice(0, 3).map((s) => ({ ...s, score: clamp(s.score) })),
     book_ids: [result.sachbuch_id, result.roman_id],
+    counter_school_slug: result.counter_school_slug,
+    counter_reason: result.counter_reason,
+    counter_book_ids: [result.counter_sachbuch_id, result.counter_roman_id],
   });
   if (error) throw error;
 

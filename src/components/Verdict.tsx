@@ -13,9 +13,13 @@ export function Verdict({
 }) {
   const bySlug = new Map(schools.map((s) => [s.slug, s]));
   const school = bySlug.get(classification.school_slug);
-  const picks = classification.book_ids
-    .map((id) => books.find((b) => b.id === id))
-    .filter((b): b is Book => Boolean(b));
+  const findBooks = (ids: string[]) =>
+    ids.map((id) => books.find((b) => b.id === id)).filter((b): b is Book => Boolean(b));
+  const picks = findBooks(classification.book_ids);
+  const counterSchool = classification.counter_school_slug
+    ? bySlug.get(classification.counter_school_slug)
+    : undefined;
+  const counterPicks = findBooks(classification.counter_book_ids ?? []);
 
   return (
     <section className="verdict" aria-labelledby="einordnung">
@@ -34,19 +38,41 @@ export function Verdict({
         ))}
       </div>
 
-      <div className="books">
-        {picks.map((book, i) => (
-          <div className="book" key={book.id}>
-            <span className="cover" style={{ "--c": COVER_COLORS[i % COVER_COLORS.length] } as React.CSSProperties} />
-            <div>
-              <small>{book.kind === "sachbuch" ? "Zum Verstehen" : "Als Geschichte"}</small>
-              <strong>{book.title}</strong>
-              <em>{book.author}</em>
-              <p>{book.blurb}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <BookList books={picks} offset={0} />
+
+      {counterSchool && (
+        <div className="counter">
+          <span className="eyebrow">Gegenperspektive</span>
+          <p className="counter-name">{counterSchool.name}</p>
+          {classification.counter_reason && <p className="explain">{classification.counter_reason}</p>}
+          <BookList books={counterPicks} offset={2} counter />
+        </div>
+      )}
     </section>
+  );
+}
+
+function BookList({ books, offset, counter = false }: { books: Book[]; offset: number; counter?: boolean }) {
+  return (
+    <div className="books">
+      {books.map((book, i) => (
+        <div className="book" key={book.id}>
+          <span
+            className="cover"
+            style={{ "--c": COVER_COLORS[(i + offset) % COVER_COLORS.length] } as React.CSSProperties}
+          />
+          <div>
+            <small>
+              {book.kind === "sachbuch"
+                ? counter ? "Die Gegenseite verstehen" : "Zum Verstehen"
+                : counter ? "Die Gegenseite erleben" : "Als Geschichte"}
+            </small>
+            <strong>{book.title}</strong>
+            <em>{book.author}</em>
+            <p>{book.blurb}</p>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

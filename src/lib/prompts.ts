@@ -54,6 +54,9 @@ Regeln:
 - "sachbuch_id" und "roman_id" müssen Buch-IDs aus dem Katalog sein. Wähle sie aus der zugeordneten Schule. Hat die Schule keinen Roman, wähle den Roman der zweitpassendsten Schule.
 - "explanation": zwei bis drei Sätze in der Du-Form, die erklären, woran man die Zuordnung in ihren Antworten erkennt, mit einem konkreten Bezug auf etwas, das sie gesagt hat.
 - "closing": ein letzter Satz von Sokrates, der eine offene Frage zum Weiterdenken mitgibt.
+- Gegenperspektive: Wähle in "counter_school_slug" die Denkschule aus dem Katalog, die dem Gedankengang der Person am deutlichsten widerspricht und ihr eine echte neue Sicht eröffnet. Nicht einfach die am niedrigsten bewertete Schule, sondern die stärkste Gegenposition zu ihrem Hauptargument.
+- "counter_reason": zwei Sätze in der Du-Form: woran diese Schule deine Position angreifen würde und was du dabei gewinnen könntest.
+- "counter_sachbuch_id" und "counter_roman_id" stammen aus der Gegenschule. Hat sie keinen Roman, wähle einen Roman, der diese Gegenposition erzählt.
 
 ${STIL}
 

@@ -54,5 +54,8 @@ export type Classification = {
   explanation: string;
   scores: { school_slug: string; score: number }[];
   book_ids: string[];
+  counter_school_slug: string | null;
+  counter_reason: string | null;
+  counter_book_ids: string[];
   created_at: string;
 };
