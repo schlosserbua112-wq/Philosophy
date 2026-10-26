@@ -74,9 +74,15 @@ export async function getOrCreateToday(db: Db, userId: string): Promise<Conversa
     .single();
 
   if (error) {
-    // Zwei Tabs gleichzeitig: Die andere Anfrage hat die Tagesfrage schon angelegt.
-    const raced = await findDaily(db, userId, day);
-    if (raced) return raced;
+    // Zwei Anfragen gleichzeitig (z. B. Vorladen und Öffnen): Die andere hat die Tagesfrage
+    // schon angelegt. Kurz warten, bis sie lesbar ist.
+    if (error.code === "23505") {
+      for (let attempt = 0; attempt < 5; attempt++) {
+        const raced = await findDaily(db, userId, day);
+        if (raced) return raced;
+        await new Promise((resolve) => setTimeout(resolve, 250));
+      }
+    }
     throw error;
   }
   return data as Conversation;

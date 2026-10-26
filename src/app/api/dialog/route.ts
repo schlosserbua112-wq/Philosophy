@@ -1,5 +1,6 @@
 import { after, NextResponse } from "next/server";
 import { z } from "zod";
+import Anthropic from "@anthropic-ai/sdk";
 import { ClaudeRefusalError } from "@/lib/claude";
 import { respond } from "@/lib/denkweise";
 import { getUser } from "@/lib/supabase/server";
@@ -26,10 +27,22 @@ export async function POST(request: Request) {
     return NextResponse.json(result);
   } catch (err) {
     console.error(err);
-    const message =
-      err instanceof ClaudeRefusalError
-        ? "Sokrates kann auf diese Antwort nicht eingehen. Formuliere sie bitte anders."
-        : "Sokrates ist gerade nicht erreichbar. Versuch es in einem Moment noch einmal.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json({ error: errorMessage(err) }, { status: 500 });
   }
+}
+
+function errorMessage(err: unknown) {
+  if (err instanceof ClaudeRefusalError) {
+    return "Sokrates kann auf diese Antwort nicht eingehen. Formuliere sie bitte anders.";
+  }
+  if (err instanceof Anthropic.AuthenticationError) {
+    return "Der Claude-API-Schlüssel ist ungültig. Prüfe ANTHROPIC_API_KEY in Vercel.";
+  }
+  if (err instanceof Anthropic.BadRequestError && err.message.includes("credit balance")) {
+    return "Das Guthaben für die Claude API ist aufgebraucht. Lade es in der Claude Console auf.";
+  }
+  if (err instanceof Anthropic.RateLimitError) {
+    return "Sokrates braucht eine kurze Pause. Versuch es in einer Minute noch einmal.";
+  }
+  return "Sokrates ist gerade nicht erreichbar. Versuch es in einem Moment noch einmal.";
 }
