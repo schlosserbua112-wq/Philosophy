@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDictation } from "./useDictation";
 
 type Turn = { role: "nutzer" | "sokrates"; content: string };
 
@@ -25,11 +26,14 @@ export function Dialog({
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(closed);
 
+  const dictation = useDictation(draft, setDraft);
+
   const answers = turns.filter((t) => t.role === "nutzer").length;
 
   async function send() {
     const text = draft.trim();
     if (!text || pending) return;
+    dictation.stop();
     setPending(true);
     setError(null);
     setTurns((t) => [...t, { role: "nutzer", content: text }]);
@@ -110,12 +114,35 @@ export function Dialog({
             disabled={pending}
           />
           <div className="composer-row">
-            <small>{answers === rounds - 1 ? "Danach folgt die Einordnung" : " "}</small>
-            <button className="btn" type="submit" disabled={pending || draft.trim().length === 0}>
-              Antworten
-            </button>
+            <small>
+              {dictation.listening
+                ? "Ich höre zu …"
+                : answers === rounds - 1
+                  ? "Danach folgt die Einordnung"
+                  : "\u00a0"}
+            </small>
+            <div className="composer-actions">
+              {dictation.supported && (
+                <button
+                  type="button"
+                  className={`mic${dictation.listening ? " on" : ""}`}
+                  onClick={dictation.toggle}
+                  disabled={pending}
+                  aria-pressed={dictation.listening}
+                  aria-label={dictation.listening ? "Spracheingabe beenden" : "Antwort einsprechen"}
+                >
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" />
+                    <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+                  </svg>
+                </button>
+              )}
+              <button className="btn" type="submit" disabled={pending || draft.trim().length === 0}>
+                Antworten
+              </button>
+            </div>
           </div>
-          {error && <p className="error" role="alert">{error}</p>}
+          {(error ?? dictation.error) && <p className="error" role="alert">{error ?? dictation.error}</p>}
         </form>
       )}
     </>

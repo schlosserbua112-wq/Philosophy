@@ -147,6 +147,23 @@ button, input, textarea { font: inherit; color: inherit; }
 .composer textarea::placeholder { color: var(--soft); }
 .composer-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .composer-row small { color: var(--soft); font-size: 12px; }
+.composer-actions { display: flex; align-items: center; gap: 8px; }
+
+.mic {
+  appearance: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--fg);
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+}
+.mic:disabled { opacity: .45; cursor: default; }
+.mic.on { background: var(--lamp); color: var(--lamp-ink); border-color: var(--lamp); animation: glow 1.6s ease-in-out infinite; }
+@keyframes glow { 50% { box-shadow: 0 0 0 7px color-mix(in oklab, var(--lamp) 22%, transparent); } }
 
 .btn {
   appearance: none;
