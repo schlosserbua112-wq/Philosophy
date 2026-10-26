@@ -1,0 +1,219 @@
+/* Nachtgespräch: ein sokratischer Dialog am Abend, gesetzt wie ein Theatertext.
+   Eine einzige warme Lampenfarbe als Akzent, alles andere bleibt im Halbdunkel. */
+:root {
+  --bg: #141b24;
+  --bg-glow: #1f2a38;
+  --surface: #1c2531;
+  --surface-2: #232e3c;
+  --line: #2a3442;
+  --fg: #e9e4d8;
+  --fg-dim: #c9cdd3;
+  --soft: #8d96a3;
+  --lamp: #e8b45a;
+  --lamp-ink: #241a08;
+  --danger: #e38a7a;
+
+  --f-voice: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --f-ui: var(--font-plex), "IBM Plex Sans", system-ui, sans-serif;
+  --f-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  --gutter: max(20px, env(safe-area-inset-left, 0px));
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: radial-gradient(120% 50% at 50% 0%, var(--bg-glow) 0%, var(--bg) 60%) fixed, var(--bg);
+  color: var(--fg);
+  font-family: var(--f-ui);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a { color: inherit; }
+button, input, textarea { font: inherit; color: inherit; }
+
+:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; border-radius: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ───── Gerüst ───── */
+.app {
+  min-height: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 96px);
+  padding-left: var(--gutter);
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.eyebrow {
+  font: 600 11px/1.2 var(--f-ui);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--soft);
+}
+
+.page-title {
+  font-family: var(--f-voice);
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.05;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.muted { color: var(--soft); }
+
+/* ───── Tab-Leiste ───── */
+.tabbar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 10px) max(16px, env(safe-area-inset-left, 0px));
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line);
+}
+.tabbar a {
+  flex: 1;
+  max-width: 140px;
+  text-align: center;
+  text-decoration: none;
+  font: 500 12px/1 var(--f-ui);
+  letter-spacing: .04em;
+  color: var(--soft);
+  padding: 10px 0;
+  border-radius: 12px;
+}
+.tabbar a[aria-current="page"] { color: var(--fg); background: var(--surface); }
+
+/* ───── Dialog ───── */
+.progress { display: flex; gap: 6px; align-items: center; font: 500 11px/1 var(--f-mono); color: var(--soft); letter-spacing: .06em; }
+.progress i { width: 26px; height: 3px; border-radius: 2px; background: var(--line); display: block; }
+.progress i.on { background: var(--lamp); }
+.progress span { margin-left: 6px; }
+
+.script { display: flex; flex-direction: column; gap: 26px; }
+.turn { display: grid; gap: 8px; animation: rise .35s ease-out both; }
+@keyframes rise { from { opacity: .2; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.speaker { font: 600 11px/1 var(--f-ui); letter-spacing: .16em; text-transform: uppercase; }
+.speaker.sokrates { color: var(--lamp); }
+.speaker.du { color: var(--soft); }
+
+.voice { font-family: var(--f-voice); font-size: 23px; line-height: 1.3; margin: 0; white-space: pre-wrap; }
+.voice.opening { font-size: 32px; line-height: 1.12; font-weight: 500; text-wrap: balance; }
+.own { margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--fg-dim); white-space: pre-wrap; }
+
+.thinking { font-family: var(--f-voice); font-style: italic; font-size: 20px; color: var(--soft); }
+.thinking::after { content: "…"; animation: pulse 1.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .3; } }
+
+.composer {
+  display: grid;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 14px 14px 12px 16px;
+}
+.composer textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: none;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1.55;
+}
+.composer textarea::placeholder { color: var(--soft); }
+.composer-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.composer-row small { color: var(--soft); font-size: 12px; }
+
+.btn {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  background: var(--lamp);
+  color: var(--lamp-ink);
+  font: 600 14px/1 var(--f-ui);
+  padding: 12px 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.ghost { background: transparent; color: var(--fg); border: 1px solid var(--line); }
+
+.error { color: var(--danger); font-size: 14px; margin: 0; }
+
+/* ───── Einordnung ───── */
+.verdict { display: grid; gap: 18px; padding-top: 8px; border-top: 1px solid var(--line); }
+.school-name { font-family: var(--f-voice); font-weight: 600; font-size: 44px; line-height: 1; color: var(--lamp); margin: 0; text-wrap: balance; }
+.verdict p { margin: 0; }
+.explain { font-family: var(--f-voice); font-size: 20px; line-height: 1.35; }
+
+.meter { display: grid; gap: 8px; font-size: 13px; color: var(--soft); }
+.meter div { display: grid; grid-template-columns: minmax(0, 9.5em) 1fr 2.2em; gap: 10px; align-items: center; font-variant-numeric: tabular-nums; }
+.meter .bar { height: 4px; border-radius: 2px; background: var(--line); position: relative; overflow: hidden; }
+.meter .bar::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w); background: var(--fg); border-radius: 2px; }
+.meter span:last-child { text-align: right; }
+
+.books { display: grid; gap: 10px; }
+.book { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: center; padding: 12px; border-radius: 16px; background: var(--surface); }
+.book .cover { width: 44px; height: 62px; border-radius: 4px; background: var(--c, #5b7a8c); box-shadow: inset -3px 0 0 rgba(0,0,0,.18); }
+.book small { display: block; font: 600 10.5px/1.2 var(--f-ui); letter-spacing: .14em; text-transform: uppercase; color: var(--soft); margin-bottom: 4px; }
+.book strong { display: block; font-weight: 500; font-size: 15px; line-height: 1.3; }
+.book em { font-style: normal; font-size: 13px; color: var(--soft); }
+.book p { font-size: 13px; color: var(--fg-dim); margin-top: 4px; }
+
+/* ───── Listen ───── */
+.list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.list a { display: grid; gap: 4px; padding: 16px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+.list .meta { font: 500 11px/1 var(--f-mono); color: var(--soft); letter-spacing: .06em; display: flex; gap: 10px; flex-wrap: wrap; }
+.list .q { font-family: var(--f-voice); font-size: 21px; line-height: 1.25; }
+.list .tag { color: var(--lamp); }
+
+.card { background: var(--surface); border-radius: 18px; padding: 18px; display: grid; gap: 10px; }
+.card h2 { font: 600 11px/1.2 var(--f-ui); letter-spacing: .16em; text-transform: uppercase; color: var(--soft); margin: 0; }
+.card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+.strength { font: 500 11px/1 var(--f-mono); color: var(--lamp); letter-spacing: .1em; }
+
+.empty { display: grid; gap: 14px; justify-items: start; }
+
+/* ───── Anmeldung ───── */
+.login { display: grid; gap: 18px; margin-top: 12vh; }
+.stack { display: grid; gap: 14px; }
+.field { display: grid; gap: 8px; }
+.field label { font-size: 13px; color: var(--soft); }
+.field input {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 17px;
+  outline: none;
+}
+.field input:focus { border-color: var(--lamp); }
+.field input.code { font-family: var(--f-mono); letter-spacing: .4em; font-size: 22px; }
